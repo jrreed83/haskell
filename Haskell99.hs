@@ -103,3 +103,42 @@ modEncoding list =
       | x /= y && count > 1  = loop (y:rest) (1) ((Multiple x count): accumList)
   in
     loop (list) (1) ([])
+
+-- Problem 12: Decode a run length encoded array
+decoding :: [Element a] -> [a]
+decoding list =
+  let
+    loop ([]) (accum) = accum
+    loop (Single h : rest) (accum) = loop (rest) (h:accum)
+    loop ((Multiple a cnt) : rest) (accum) = loop (rest) (accum ++ (replicate (cnt) (a)))
+  in
+    loop (list) ([])
+
+--Problem 14 :: Duplicate the elements of a list
+dupli :: [a] -> [a]
+dupli list =
+  let
+    loop (h:t) (accum) = loop (t) (h:h:accum)
+    loop ([]) (accum) = reverseList accum
+  in
+    loop (list) ([])
+
+-- Problem 15 :: Duplicate the elements of list a specified number of times
+repli :: [a]->Int->[a]
+repli list n =
+  let
+    loop (h:t) (n) (accumList) = loop (t) (n) (accumList ++ (replicate (n) (h)))
+    loop ([]) (_) (accumList)  = accumList
+  in
+    loop (list) (n) ([])
+
+-- Problem 16 :: Drop the n'th element from a list
+dropItem :: [a] -> Int -> [a]
+dropItem list n =
+  let
+    loop ([]) (_) (_) (accumList) = reverseList accumList
+    loop (h:t) (n) (j) (accumList)
+      | j == n = loop (t) (n) (1) (accumList)
+      | j < n  = loop (t) (n) (j+1) (h:accumList)
+  in
+    loop (list) (n) (1) ([])
