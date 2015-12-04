@@ -12,8 +12,8 @@ lastButOneElement [x,y] = Just x
 lastButOneElement (h:t) = lastButOneElement (t)
 
 --Problem 3: Find the k'th element of list
-elementAt :: Int->[a]->Maybe a
-elementAt k list
+(.@.) :: [a]->Int->Maybe a
+(.@.) list k
   | k < 0 = Nothing
   | otherwise = let loop (j) (k) (h:t)
                       | j == k = Just h
@@ -142,3 +142,28 @@ dropItem list n =
       | j < n  = loop (t) (n) (j+1) (h:accumList)
   in
     loop (list) (n) (1) ([])
+
+-- Problem 17 : Split a list into two parts, the length of first is given
+split :: Int->[a]->([a],[a])
+split n list =
+  let
+    loop (h:t) (j) (accum)
+      | j == 0 = (reverseList(h:accum),t)
+      | j >  0  = loop (t) (j-1) (h:accum)
+    loop [] _ accum = (reverseList accum,[])
+  in
+    loop (list) (n-1) ([])
+
+-- Problem 31: Determine if a number is prime.  We perform tail recursion, starting
+--             from the square-root of the supplied number and decrementing
+isPrime :: (Integral a)=>a->Bool
+isPrime x
+  | x <= 0 = False
+  | otherwise = let loop x j
+                      | j == 1 = True
+                      | j > 1 && (mod x j) == 0 = False
+                      | j > 1 && (mod x j) /= 0 = loop (x) (j-1)
+                in loop (x) (start)
+                  -- There is probably a better way to take the square-root of an Integral
+                  -- type and casting to Integral type
+                  where start = round $ sqrt $ fromIntegral $ x 
