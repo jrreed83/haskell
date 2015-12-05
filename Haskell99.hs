@@ -1,4 +1,3 @@
-
 -- Problem 1: Find the last element of the list
 lastElement :: [a] -> Maybe a
 lastElement []    = Nothing
@@ -166,4 +165,4 @@ isPrime x
                 in loop (x) (start)
                   -- There is probably a better way to take the square-root of an Integral
                   -- type and casting to Integral type
-                  where start = round $ sqrt $ fromIntegral $ x 
+                  where start = round $ sqrt $ fromIntegral $ x
