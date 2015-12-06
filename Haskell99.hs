@@ -216,11 +216,16 @@ isPrime x
                   where start = round $ sqrt $ fromIntegral $ x
 
 -- Problem 32 : Find common common divisor using Euclid's algorithm
-gcd' :: (Integral a)=> a->a->Maybe a
-gcd' x y
-  | x == 0 && y /= 0 = Just y
-  | x /= 0 && y == 0 = Just x
-  | x == 0 && y == 0 = Nothing
-  | x /= 0 && y /= 0 && x == y = Just x
-  | x /= 0 && y /= 0 && x > y = gcd' (mod x y) (div x y)
-  | x /= 0 && y /= 0 && x < y = gcd' (mod y x) (div y x)
+mygcd :: (Integral a)=> a->a->a
+mygcd x y
+  | x == y = x
+  | x == 0 && y /= 0 = y
+  | x /= 0 && y == 0 = x
+  | x /= 0 && y /= 0 && x > y && (mod x y) == 0 = y
+  | x /= 0 && y /= 0 && x > y && (mod x y) /= 0 = mygcd (mod x y) (y)
+  | x /= 0 && y /= 0 && x < y && (mod y x) == 0 = x
+  | x /= 0 && y /= 0 && x < y && (mod y x) /= 0 = mygcd (mod y x) (x)
+
+-- Problem 33 : Determine if two numbers are coprime
+coprime :: (Integral a)=> a->a->Bool
+coprime x y = (mygcd x y == 1)
