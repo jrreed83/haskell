@@ -165,8 +165,23 @@ slice (list) (start) (stop)
                 in loop (list) (start) (stop) (1) ([])
 
 --Problem 19 : Rotate a list N places to the left
-rotate :: [a]->Int->[a]
-rotate list n = undefined
+rotate :: Int->[a]->[a]
+rotate _ [] = []
+rotate 0 list = list
+rotate n list
+  | n > 0 = let len = length list
+                (left,right) = split (list) (n `mod` len)
+            in  (right ++ left)
+  | n < 0 = let len = length list
+                (left,right) = split (list) ((len+n) `mod` len)
+            in  (right ++ left)
+--Problem 20: Remove the kth element from list
+remove :: Int->[a]->[a]
+remove k list
+  | k < 1 || k > length list = list
+  | k == 1 = tail list
+  | otherwise = let (left,h:t) = split list (k-1) in (left ++ t)
+
 
 --Problem 21 : Insert into a list (Should use split)
 insertAt :: a->[a]->Int->[a]
@@ -177,6 +192,14 @@ insertAt x list j
                       | k == j = (accumList ++ (x:h:t))
                       | k < j = loop (x) (t) (j) (k+1) (accumList ++ [h])
                 in loop (x) (list) (j) (1) ([])
+
+-- Problem 22: Create a list containing integers within a certain range
+range :: Int->Int->[Int]
+range start stop
+  | start > stop = []
+  | otherwise = [x | x <- [start..stop]]
+
+-- Problem 23:
 
 -- Problem 31: Determine if a number is prime.  We perform tail recursion, starting
 --             from the square-root of the supplied number and decrementing
@@ -191,3 +214,13 @@ isPrime x
                   -- There is probably a better way to take the square-root of an Integral
                   -- type and casting to Integral type
                   where start = round $ sqrt $ fromIntegral $ x
+
+-- Problem 32 : Find common common divisor using Euclid's algorithm
+gcd' :: (Integral a)=> a->a->Maybe a
+gcd' x y
+  | x == 0 && y /= 0 = Just y
+  | x /= 0 && y == 0 = Just x
+  | x == 0 && y == 0 = Nothing
+  | x /= 0 && y /= 0 && x == y = Just x
+  | x /= 0 && y /= 0 && x > y = gcd' (mod x y) (div x y)
+  | x /= 0 && y /= 0 && x < y = gcd' (mod y x) (div y x)
