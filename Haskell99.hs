@@ -143,8 +143,8 @@ dropItem list n =
     loop (list) (n) (1) ([])
 
 -- Problem 17 : Split a list into two parts, the length of first is given
-split :: Int->[a]->([a],[a])
-split n list =
+split :: [a]->Int->([a],[a])
+split list n =
   let
     loop (h:t) (j) (accum)
       | j == 0 = (reverseList(h:accum),t)
@@ -152,6 +152,31 @@ split n list =
     loop [] _ accum = (reverseList accum,[])
   in
     loop (list) (n-1) ([])
+
+-- Problem 18 : Extract a slice from a list
+slice :: [a] -> Int -> Int -> [a]
+slice (list) (start) (stop)
+  | start > stop = error "The start index cannot be larger than stop index"
+  | otherwise = let loop ([]) (_) (_) (_) (accumList) = reverseList accumList
+                    loop (h:t) (start) (stop) (n) (accumList)
+                      | n < start = loop (t) (start) (stop) (n+1) (accumList)
+                      | start <= n && n <= stop = loop (t) (start) (stop) (n+1) (h:accumList)
+                      | n > stop = reverseList accumList
+                in loop (list) (start) (stop) (1) ([])
+
+--Problem 19 : Rotate a list N places to the left
+rotate :: [a]->Int->[a]
+rotate list n = undefined
+
+--Problem 21 : Insert into a list (Should use split)
+insertAt :: a->[a]->Int->[a]
+insertAt x list j
+  | j < 1 = list
+  | j > (length list) = list
+  | otherwise = let loop (x) (h:t) (j) (k) (accumList)
+                      | k == j = (accumList ++ (x:h:t))
+                      | k < j = loop (x) (t) (j) (k+1) (accumList ++ [h])
+                in loop (x) (list) (j) (1) ([])
 
 -- Problem 31: Determine if a number is prime.  We perform tail recursion, starting
 --             from the square-root of the supplied number and decrementing
