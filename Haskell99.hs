@@ -229,3 +229,34 @@ mygcd x y
 -- Problem 33 : Determine if two numbers are coprime
 coprime :: (Integral a)=> a->a->Bool
 coprime x y = (mygcd x y == 1)
+
+-- Problem 34 : Calculate Euler's totient function
+totient :: (Integral a) => a->a
+totient x
+  | x <= 0 = 0
+  | otherwise = let loop (x) (0) (accum) = accum
+                    loop (x) (k) (accum)
+                      | coprime (x) (k) == True  = loop (x) (k-1) (accum+1)
+                      | coprime (x) (k) == False = loop (x) (k-1) (accum)
+                in  loop (x) (x-1) (0)
+
+-- Problem 35 : Prime factorization
+squareRoot :: (Integral a)=>a->a
+squareRoot x = round $ sqrt $ fromIntegral $ x
+
+smallestPrimeDivisor :: (Integral a) => a->a
+smallestPrimeDivisor x
+  | isPrime x = 1
+  | otherwise =  let loop (k) (x)
+                      | (isPrime k) && (mod (x) (k) == 0) = k
+                      | otherwise = loop (k+1) (x)
+                 in  loop (2) (x)
+
+primeFactors :: (Integral a)=> a -> [a]
+primeFactors x =
+  let loop (y) (accumList)
+        | isPrime y = reverseList (y:accumList)
+        | otherwise = let divisor = smallestPrimeDivisor y   -- Find the smallest prime divisor
+                          newVal  = div y divisor            -- Find the quotient
+                      in  loop (newVal) (divisor:accumList)  -- Resume operation on quotient
+  in loop (x) ([1])
