@@ -247,10 +247,8 @@ squareRoot x = round $ sqrt $ fromIntegral $ x
 smallestPrimeDivisor :: (Integral a) => a->a
 smallestPrimeDivisor x
   | isPrime x = 1
-  | otherwise =  let loop (k) (x)
-                      | (isPrime k) && (mod (x) (k) == 0) = k
-                      | otherwise = loop (k+1) (x)
-                 in  loop (2) (x)
+  | otherwise = (filter (\y -> (isPrime y) && (mod x y) == 0) [1..x] ) !! 1 -- Compute the list of prime divisors
+                                                                            -- picking off the smallest one
 
 primeFactors :: (Integral a)=> a -> [a]
 primeFactors x =
