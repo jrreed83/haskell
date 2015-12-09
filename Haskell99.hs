@@ -1,3 +1,4 @@
+import System.Random(randomRs,mkStdGen,randomR)
 -- Problem 1: Find the last element of the list
 lastElement :: [a] -> Maybe a
 lastElement []    = Nothing
@@ -199,7 +200,17 @@ range start stop
   | start > stop = []
   | otherwise = [x | x <- [start..stop]]
 
--- Problem 23:
+-- Problem 23: Extract a number of randomly selected elements from a list (without using replacement)
+randomSelect :: [a] -> Int -> [a]
+randomSelect list numElements =
+  let loop (h:t) (n) (k) (accumList)
+        | n == k  = accumList
+        | k < n  = let (index,_)  = randomR (1,length (h:t)) gen
+                       listEntry  = (h:t) !! (index-1)
+                   in  loop (remove index (h:t)) (n) (k+1) (listEntry:accumList)
+                   where gen = mkStdGen(1000)
+      loop ([]) (_) (_) (accumList) = accumList
+  in  loop (list) (numElements) (0) ([])
 
 -- Problem 31: Determine if a number is prime.  We perform tail recursion, starting
 --             from the square-root of the supplied number and decrementing
