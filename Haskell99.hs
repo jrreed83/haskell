@@ -212,6 +212,10 @@ randomSelect list numElements =
       loop ([]) (_) (_) (accumList) = accumList
   in  loop (list) (numElements) (0) ([])
 
+-- Problem 24: Draw n different random numbers from the set 1..M
+randSelect :: Int->Int->[Int]
+randSelect numDraws numElements = randomSelect ([1..numElements]) (numDraws)
+
 -- Problem 31: Determine if a number is prime.  We perform tail recursion, starting
 --             from the square-root of the supplied number and decrementing
 isPrime :: (Integral a)=>a->Bool
