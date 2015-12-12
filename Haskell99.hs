@@ -32,9 +32,9 @@ myLength list =
 reverseList :: [a] -> [a]
 reverseList [] = []
 reverseList list =
-  let loop (h:t) (accum) = loop (t) (h:accum)
-      loop [] (accum) = accum
-  in loop list []
+  loop list []
+  where loop (h:t) (accum) = loop (t) (h:accum)
+        loop [] (accum) = accum
 
 -- Problem 6 : Check whether word in Palindrome
 isPalindrome :: String -> Bool
@@ -213,8 +213,16 @@ randomSelect list numElements =
   in  loop (list) (numElements) (0) ([])
 
 -- Problem 24: Draw n different random numbers from the set 1..M
-randSelect :: Int->Int->[Int]
-randSelect numDraws numElements = randomSelect ([1..numElements]) (numDraws)
+randomSelect' :: Int->Int->[Int]
+randomSelect' numDraws numElements = randomSelect ([1..numElements]) (numDraws)
+
+-- Problem 25: Random permutation of list
+randPerm :: [a] -> [a]
+randPerm list = randomSelect (list) (length list)
+
+-- Problem 26: Combinations of list
+combinations :: Int->[a]->[[a]]
+combinations k list = undefined
 
 -- Problem 31: Determine if a number is prime.  We perform tail recursion, starting
 --             from the square-root of the supplied number and decrementing
